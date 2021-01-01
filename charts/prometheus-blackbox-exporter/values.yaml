@@ -84,6 +84,11 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
+# if the configuration is managed as secret outside the chart, using SealedSecret for example,
+# provide the name of the secret here. If secretConfig is set to true, configExistingSecretName will be ignored
+# in favor of the config value.
+configExistingSecretName: ""
+# Store the configuration as a `Secret` instead of a `ConfigMap`, useful in case it contains sensitive data
 secretConfig: false
 config:
   modules:
@@ -206,6 +211,8 @@ networkPolicy:
   # Enable network policy and allow access from anywhere
   enabled: false
   # Limit access only from monitoring namespace
+  # Before setting this value to true, you must add the name=monitoring label to the monitoring namespace
+  # Network Policy uses label filtering
   allowMonitoringNamespace: false
 
 ## dnsPolicy and dnsConfig for Deployments and Daemonsets if you want non-default settings.

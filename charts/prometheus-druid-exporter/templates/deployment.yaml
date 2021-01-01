@@ -19,6 +19,15 @@ spec:
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
+      annotations:
+        {{- if not .Values.serviceMonitor.enabled }}
+        prometheus.io/path: /metrics
+        prometheus.io/port: metrics
+        prometheus.io/scrape: "true"
+        {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{ toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ include "prometheus-druid-exporter.fullname" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
